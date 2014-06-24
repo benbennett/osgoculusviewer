@@ -102,8 +102,14 @@ void OculusViewConfig::configure(osgViewer::View& view) const
 	}
 
 	unsigned int width, height;
-	wsi->getScreenResolution(osg::GraphicsContext::ScreenIdentifier(0), width, height);
 	osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits;
+	// allow reading DISPLAY property on *nix OS. 
+	osg::GraphicsContext::ScreenIdentifier si;
+	si.readDISPLAY();
+	wsi->getScreenResolution(osg::GraphicsContext::ScreenIdentifier(si.displayNum), width, height);
+
+	traits->screenNum = si.screenNum;
+	traits->displayNum = si.displayNum;
 	traits->windowDecoration = false;
 	traits->x = 0;
 	traits->y = 0;
