@@ -7,12 +7,14 @@ PROJECT(OsgOculusViewer)
 SET(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Show relative paths options
-OPTION(CMAKE_USE_RELATIVE_PATHS "If true, cmake will use relative paths in makefiles and projects." ON)
+OPTION(CMAKE_USE_RELATIVE_PATHS "If true, cmake will use relative paths in makefiles and projects." OFF)
 MARK_AS_ADVANCED(CMAKE_USE_RELATIVE_PATHS)
 
 # Build example viewer
 OPTION(BUILD_EXAMPLE "Enable to build viewer example" ON)
-
+IF(UNIX)
+   ADD_DEFINITIONS("-w")
+ENDIF(UNIX)
 
 IF (WIN32)
 	# Path to find OpenSceneGraph
