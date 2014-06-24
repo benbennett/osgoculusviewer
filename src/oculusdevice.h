@@ -10,6 +10,7 @@
 
 #include <OVR.h>
 #include <osg/Matrix>
+#include <osg/Quat>
 
 
 class OculusDevice : public osg::Referenced {
@@ -55,6 +56,7 @@ class OculusDevice : public osg::Referenced {
 		void setSensorPredictionEnabled(bool prediction);
 		void setSensorPredictionDelta(float delta) { m_predictionDelta = delta; }
 		void setCustomScaleFactor(const float& customScaleFactor) { m_useCustomScaleFactor = true; m_customScaleFactor = customScaleFactor; }
+		void setRototationForOSG(const osg::Quat &rotFromOcuToOsg);
 
 		void resetSensorOrientation() { if (m_sensorFusion) m_sensorFusion->Reset(); }
 
@@ -74,6 +76,7 @@ class OculusDevice : public osg::Referenced {
 		float m_nearClip;
 		float m_farClip;
 		float m_predictionDelta;
+		osg::Quat m_rotFromOcuToOsg;
 	private:
 		OculusDevice(const OculusDevice&); // Do not allow copy
 };

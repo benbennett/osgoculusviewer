@@ -6,6 +6,8 @@
  */
 
 #include "oculusdevice.h"
+#include<cmath>
+#include <osg/Vec3>
 
 
 OculusDevice::OculusDevice() :
@@ -43,6 +45,8 @@ OculusDevice::OculusDevice() :
 	} else {
 		osg::notify(osg::WARN) << "Warning: Unable to connect to tracker sensor." << std::endl;
 	}
+	osg::Quat tmpQuad((4*std::atan(1))/2.0,osg::Vec3(1,0,0));
+	m_rotFromOcuToOsg = tmpQuad;
 }
 
 OculusDevice::~OculusDevice()
@@ -256,6 +260,7 @@ osg::Quat OculusDevice::getOrientation() const
 		}
 
 		osgQuat.set(quat.x, quat.y, quat.z, -quat.w);
+		osgQuat = osgQuat*m_rotFromOcuToOsg;
 	}
 
 	return osgQuat;
@@ -266,6 +271,11 @@ void OculusDevice::setSensorPredictionEnabled(bool prediction)
 	if (m_sensorFusion) {
 		m_sensorFusion->SetPredictionEnabled(prediction);
 	}
+}
+
+void OculusDevice::setRototationForOSG(const osg::Quat& rotFromOcuToOsg)
+{
+	m_rotFromOcuToOsg = rotFromOcuToOsg;
 }
 
 float OculusDevice::distortionScale() const
